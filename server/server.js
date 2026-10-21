@@ -12,6 +12,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+
 // Base Route
 app.get('/', (req, res) => {
   res.send('Campus Textbook & Tech Swap API is running');
