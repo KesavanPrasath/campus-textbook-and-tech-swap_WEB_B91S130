@@ -85,5 +85,6 @@ const getMe = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  getMe,
 };
 
