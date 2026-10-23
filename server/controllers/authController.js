@@ -78,8 +78,12 @@ const loginUser = async (req, res) => {
 };
 
 
+const getMe = async (req, res) => {
+  res.status(200).json(req.user);
+};
 
 module.exports = {
   registerUser,
   loginUser,
 };
+
