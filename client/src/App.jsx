@@ -56,6 +56,39 @@ const Marketplace = () => {
   );
 };
 
+// Register Component
+const Register = ({ setUser }) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await API.post('/auth/register', { name, email, password });
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data));
+      setUser(res.data);
+      navigate('/');
+    } catch (err) {
+      alert(err.response?.data?.message || 'Registration failed');
+    }
+  };
+
+  return (
+    <div style={{ padding: 40, maxWidth: 400, margin: '40px auto', border: '1px solid #cbd5e1', borderRadius: 8 }}>
+      <h3>Register</h3>
+      <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required style={{ padding: 10 }} />
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required style={{ padding: 10 }} />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required style={{ padding: 10 }} />
+        <button type="submit" style={{ padding: 10, background: '#2563eb', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer' }}>Register</button>
+      </form>
+    </div>
+  );
+};
+
 // Main Application Component is below
 export default function App() {
   const [user, setUser] = useState(null);
