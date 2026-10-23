@@ -89,6 +89,80 @@ const Register = ({ setUser }) => {
   );
 };
 
+// Login Component
+const Login = ({ setUser }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await API.post('/auth/login', { email, password });
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data));
+      setUser(res.data);
+      navigate('/');
+    } catch (err) {
+      alert(err.response?.data?.message || 'Login failed');
+    }
+  };
+
+  return (
+    <div style={{ padding: 40, maxWidth: 400, margin: '40px auto', border: '1px solid #cbd5e1', borderRadius: 8 }}>
+      <h3>Login</h3>
+      <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required style={{ padding: 10 }} />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required style={{ padding: 10 }} />
+        <button type="submit" style={{ padding: 10, background: '#2563eb', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer' }}>Login</button>
+      </form>
+    </div>
+  );
+};
+
+// Create Item Component
+const CreateItem = () => {
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('Textbook');
+  const [condition, setCondition] = useState('Like New');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await API.post('/items', { title, category, condition, price: Number(price), description });
+      navigate('/');
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to create item');
+    }
+  };
+
+  return (
+    <div style={{ padding: 40, maxWidth: 500, margin: '40px auto', border: '1px solid #cbd5e1', borderRadius: 8 }}>
+      <h3>Post a New Item</h3>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+        <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required style={{ padding: 10 }} />
+        <select value={category} onChange={(e) => setCategory(e.target.value)} style={{ padding: 10 }}>
+          <option value="Textbook">Textbook</option>
+          <option value="Tech">Tech</option>
+          <option value="Other">Other</option>
+        </select>
+        <select value={condition} onChange={(e) => setCondition(e.target.value)} style={{ padding: 10 }}>
+          <option value="Brand New">Brand New</option>
+          <option value="Like New">Like New</option>
+          <option value="Good">Good</option>
+          <option value="Fair">Fair</option>
+        </select>
+        <input type="number" placeholder="Price ($)" value={price} onChange={(e) => setPrice(e.target.value)} required style={{ padding: 10 }} />
+        <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required style={{ padding: 10, height: 80 }} />
+        <button type="submit" style={{ padding: 10, background: '#16a34a', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer' }}>Post Item</button>
+      </form>
+    </div>
+  );
+};
+
 // Main Application Component is below
 export default function App() {
   const [user, setUser] = useState(null);
@@ -111,8 +185,9 @@ export default function App() {
       <Navbar user={user} handleLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Marketplace />} />
-        <Route path="/login" element={<div style={{ padding: 20 }}>Login Form Component</div>} />
-        <Route path="/register" element={<div style={{ padding: 20 }}>Register Form Component</div>} />
+        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/register" element={<Register setUser={setUser} />} />
+        <Route path="/create" element={<CreateItem />} />
       </Routes>
     </Router>
   );
