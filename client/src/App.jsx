@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import API from './api';
 
-// Navigation bar
+// Navigation Bar
 const Navbar = ({ user, handleLogout }) => (
-  <nav style={{ padding: '10px 20px', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc' }}>
-    <h2>Campus Swap</h2>
+  <nav style={{ padding: '15px 20px', display: 'flex', justifyContent: 'space-between', background: '#1e293b', color: '#fff' }}>
+    <h2 style={{ margin: 0 }}>Campus Swap</h2>
     <div>
-      <Link to="/" style={{ marginRight: 15 }}>Marketplace</Link>
+      <Link to="/" style={{ color: '#fff', marginRight: 20, textDecoration: 'none' }}>Marketplace</Link>
       {user ? (
         <>
-          <span style={{ marginRight: 15 }}>Hello, {user.name}</span>
-          <button onClick={handleLogout}>Logout</button>
+          <Link to="/create" style={{ color: '#38bdf8', marginRight: 20, textDecoration: 'none' }}>+ Post Item</Link>
+          <span style={{ marginRight: 20 }}>Hello, {user.name}</span>
+          <button onClick={handleLogout} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: 4, cursor: 'pointer' }}>Logout</button>
         </>
       ) : (
         <>
-          <Link to="/login" style={{ marginRight: 15 }}>Login</Link>
-          <Link to="/register">Register</Link>
+          <Link to="/login" style={{ color: '#fff', marginRight: 20, textDecoration: 'none' }}>Login</Link>
+          <Link to="/register" style={{ color: '#fff', textDecoration: 'none' }}>Register</Link>
         </>
       )}
     </div>
