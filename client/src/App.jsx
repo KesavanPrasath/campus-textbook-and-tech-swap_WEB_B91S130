@@ -35,19 +35,19 @@ const Marketplace = () => {
   }, []);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h3>Available Items</h3>
+    <div style={{ padding: 30, maxWidth: 1000, margin: '0 auto' }}>
+      <h3>Available Listings</h3>
       {items.length === 0 ? (
-        <p>No items listed yet.</p>
+        <p>No items listed yet. Be the first to post!</p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 15 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 20 }}>
           {items.map((item) => (
-            <div key={item._id} style={{ border: '1px solid #ddd', padding: 15, borderRadius: 5 }}>
-              <h4>{item.title}</h4>
-              <p><strong>Category:</strong> {item.category}</p>
-              <p><strong>Condition:</strong> {item.condition}</p>
-              <p><strong>Price:</strong> ${item.price}</p>
-              <p>{item.description}</p>
+            <div key={item._id} style={{ border: '1px solid #cbd5e1', padding: 20, borderRadius: 8, background: '#f8fafc' }}>
+              <h4 style={{ margin: '0 0 10px 0' }}>{item.title}</h4>
+              <p style={{ margin: '5px 0' }}><strong>Category:</strong> {item.category}</p>
+              <p style={{ margin: '5px 0' }}><strong>Condition:</strong> {item.condition}</p>
+              <p style={{ margin: '5px 0' }}><strong>Price:</strong> ${item.price}</p>
+              <p style={{ margin: '10px 0 0 0', color: '#475569' }}>{item.description}</p>
             </div>
           ))}
         </div>
