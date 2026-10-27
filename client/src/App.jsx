@@ -58,6 +58,16 @@ const Marketplace = ({ user }) => {
               <p style={{ margin: '5px 0' }}><strong>Condition:</strong> {item.condition}</p>
               <p style={{ margin: '5px 0' }}><strong>Price:</strong> ${item.price}</p>
               <p style={{ margin: '10px 0 0 0', color: '#475569' }}>{item.description}</p>
+
+          {user && item.user && item.user._id === user._id && (
+               <button 
+                  onClick={() => handleDelete(item._id)}
+                  style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: 4, cursor: 'pointer', marginTop: '15px' }}
+               >
+                  Delete
+                </button>
+              )}
+
             </div>
           ))}
         </div>
