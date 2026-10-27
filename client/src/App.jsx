@@ -34,6 +34,16 @@ const Marketplace = () => {
       .catch((err) => console.error('Failed to fetch items:', err));
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this listing?')) return;
+    try {
+      await API.delete(`/items/${id}`);
+      setItems(items.filter(item => item._id !== id));
+    } catch (error) {
+      alert(error.response?.data?.message || 'Failed to delete item');
+    }
+  };
+
   return (
     <div style={{ padding: 30, maxWidth: 1000, margin: '0 auto' }}>
       <h3>Available Listings</h3>
