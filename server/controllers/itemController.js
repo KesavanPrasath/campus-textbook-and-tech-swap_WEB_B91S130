@@ -32,29 +32,29 @@ const createItem = async (req, res) => {
   }
 };
 
+
+// Deleting an item
 const deleteItem = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
-
+    
     if (!item) {
       return res.status(404).json({ message: 'Item not found' });
     }
 
-    // Verify user owns the item
+    // this below comand verify that, logged-in user owns the item
     if (item.user.toString() !== req.user._id.toString()) {
-      return res.status(401).json({ message: 'User not authorized' });
+      return res.status(403).json({ message: 'User not authorized' });
     }
 
     await item.deleteOne();
-
-    res.status(200).json({ id: req.params.id, message: 'Item removed' });
+    res.json({ message: 'Item removed successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-
-
+// Export deleteItem wwith controllers
 module.exports = {
   getItems,
   createItem,
