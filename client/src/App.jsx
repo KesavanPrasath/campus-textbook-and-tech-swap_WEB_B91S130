@@ -25,11 +25,10 @@ const Navbar = ({ user, handleLogout }) => (
   </nav>
 );
 
-// Marketplace Component, mean display items are,
-
+// Marketplace Component
 const Marketplace = ({ user }) => {
   const [items, setItems] = useState([]);
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     API.get('/items')
@@ -47,23 +46,6 @@ const navigate = useNavigate();
     }
   };
 
-  {user && item.user && item.user._id === user._id && (
-  <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
-    <button 
-      onClick={() => navigate(`/edit/${item._id}`)}
-      style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: 4, cursor: 'pointer' }}
-    >
-      Edit
-    </button>
-    <button 
-      onClick={() => handleDelete(item._id)}
-      style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: 4, cursor: 'pointer' }}
-    >
-      Delete
-    </button>
-  </div>
-)}
-
   return (
     <div style={{ padding: 30, maxWidth: 1000, margin: '0 auto' }}>
       <h3>Available Listings</h3>
@@ -79,15 +61,22 @@ const navigate = useNavigate();
               <p style={{ margin: '5px 0' }}><strong>Price:</strong> ${item.price}</p>
               <p style={{ margin: '10px 0 0 0', color: '#475569' }}>{item.description}</p>
 
-          {user && item.user && item.user._id === user._id && (
-               <button 
-                  onClick={() => handleDelete(item._id)}
-                  style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: 4, cursor: 'pointer', marginTop: '15px' }}
-               >
-                  Delete
-                </button>
+              {user && item.user && item.user._id === user._id && (
+                <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
+                  <button 
+                    onClick={() => navigate(`/edit/${item._id}`)}
+                    style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: 4, cursor: 'pointer' }}
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(item._id)}
+                    style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: 4, cursor: 'pointer' }}
+                  >
+                    Delete
+                  </button>
+                </div>
               )}
-
             </div>
           ))}
         </div>
@@ -203,7 +192,7 @@ const CreateItem = () => {
   );
 };
 
-// Main Application Component is below
+// Main Application Component
 export default function App() {
   const [user, setUser] = useState(null);
 
