@@ -194,7 +194,7 @@ export default function App() {
     <Router>
       <Navbar user={user} handleLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<Marketplace />} />
+        <Route path="/" element={<Marketplace user={user} />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/register" element={<Register setUser={setUser} />} />
         <Route path="/create" element={<CreateItem />} />
