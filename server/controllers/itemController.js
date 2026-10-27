@@ -32,6 +32,33 @@ const createItem = async (req, res) => {
   }
 };
 
+// @desc    Updating an item
+// @route   PUT /api/items/:id
+const updateItem = async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id);
+
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+
+    // Check ownership
+    if (item.user.toString() !== req.user.id) {
+      return res.status(401).json({ message: 'User not authorized' });
+    }
+
+    const updatedItem = await Item.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.status(200).json(updatedItem);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 // Deleting an item
 const deleteItem = async (req, res) => {
