@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://localhost:5000/api',
 });
 
 API.interceptors.request.use((req) => {
@@ -9,4 +9,7 @@ API.interceptors.request.use((req) => {
   if (token) {
     req.headers.Authorization = `Bearer ${token}`;
   }
-  return 
+  return req;
+});
+
+export default API;
