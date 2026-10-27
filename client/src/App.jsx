@@ -25,7 +25,7 @@ const Navbar = ({ user, handleLogout }) => (
 );
 
 // Marketplace Component, mean display items are,
-const Marketplace = () => {
+const Marketplace = ({ user }) => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
