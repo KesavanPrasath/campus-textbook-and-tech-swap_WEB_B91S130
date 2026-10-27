@@ -60,3 +60,31 @@ module.exports = {
   createItem,
   deleteItem,
 };
+
+
+// Deleting an item
+const deleteItem = async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id);
+    
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+
+    // this below comand verify that, logged-in user owns the item
+    if (item.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'User not authorized' });
+    }
+
+    await item.deleteOne();
+    res.json({ message: 'Item removed successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Export deleteItem wwith controllers
+module.exports = {
+  // reports!
+  deleteItem,
+};
