@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import API from './api';
+import EditItem from './EditItem';
 
 // Navigation Bar
 const Navbar = ({ user, handleLogout }) => (
@@ -25,8 +26,10 @@ const Navbar = ({ user, handleLogout }) => (
 );
 
 // Marketplace Component, mean display items are,
+
 const Marketplace = ({ user }) => {
   const [items, setItems] = useState([]);
+const navigate = useNavigate();
 
   useEffect(() => {
     API.get('/items')
@@ -43,6 +46,23 @@ const Marketplace = ({ user }) => {
       alert(error.response?.data?.message || 'Failed to delete item');
     }
   };
+
+  {user && item.user && item.user._id === user._id && (
+  <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
+    <button 
+      onClick={() => navigate(`/edit/${item._id}`)}
+      style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: 4, cursor: 'pointer' }}
+    >
+      Edit
+    </button>
+    <button 
+      onClick={() => handleDelete(item._id)}
+      style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: 4, cursor: 'pointer' }}
+    >
+      Delete
+    </button>
+  </div>
+)}
 
   return (
     <div style={{ padding: 30, maxWidth: 1000, margin: '0 auto' }}>
