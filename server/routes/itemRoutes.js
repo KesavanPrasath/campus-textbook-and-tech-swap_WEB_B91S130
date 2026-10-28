@@ -3,6 +3,8 @@ const router = express.Router();
 const {
   getItems,
   createItem,
+  updateItem,
+  
   deleteItem,
 } = require('../controllers/itemController');
 const { protect } = require('../middleware/authMiddleware');
