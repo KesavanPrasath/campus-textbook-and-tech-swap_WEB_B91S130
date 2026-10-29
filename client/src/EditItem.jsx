@@ -51,9 +51,21 @@ const { id } = useParams();
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-slate-800 rounded-lg shadow-md text-white">
-      <h2 className="text-2xl font-bold mb-6 text-center">Edit Item Listing</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div style={{
+      maxWidth: '450px',
+      margin: '40px auto',
+      padding: '30px',
+      backgroundColor: '#1e293b',
+      color: '#ffffff',
+      borderRadius: '8px',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)'
+    }
+    }
+    >
+      <h2 style={{ textAlign: 'center', marginBottom: '20px', fontSize: '24px', fontWeight: 'bold' }}>
+        Edit Item Listing
+      </h2>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         <input
           type="text"
           name="title"
@@ -61,13 +73,13 @@ const { id } = useParams();
           value={formData.title}
           onChange={handleChange}
           required
-          className="w-full p-2 rounded bg-slate-700 border border-slate-600"
+          style={{ padding: '10px', borderRadius: '4px', border: '1px solid #475569', backgroundColor: '#334155', color: '#fff' }}
         />
         <select
           name="category"
           value={formData.category}
           onChange={handleChange}
-          className="w-full p-2 rounded bg-slate-700 border border-slate-600"
+          style={{ padding: '10px', borderRadius: '4px', border: '1px solid #475569', backgroundColor: '#334155', color: '#fff' }}
         >
           <option value="Textbook">Textbook</option>
           <option value="Tech">Tech</option>
@@ -77,7 +89,7 @@ const { id } = useParams();
           name="condition"
           value={formData.condition}
           onChange={handleChange}
-          className="w-full p-2 rounded bg-slate-700 border border-slate-600"
+          style={{ padding: '10px', borderRadius: '4px', border: '1px solid #475569', backgroundColor: '#334155', color: '#fff' }}
         >
           <option value="New">New</option>
           <option value="Like New">Like New</option>
@@ -91,7 +103,7 @@ const { id } = useParams();
           value={formData.price}
           onChange={handleChange}
           required
-          className="w-full p-2 rounded bg-slate-700 border border-slate-600"
+          style={{ padding: '10px', borderRadius: '4px', border: '1px solid #475569', backgroundColor: '#334155', color: '#fff' }}
         />
         <textarea
           name="description"
@@ -99,11 +111,21 @@ const { id } = useParams();
           value={formData.description}
           onChange={handleChange}
           required
-          className="w-full p-2 rounded bg-slate-700 border border-slate-600"
+          rows="4"
+          style={{ padding: '10px', borderRadius: '4px', border: '1px solid #475569', backgroundColor: '#334155', color: '#fff', resize: 'vertical' }}
         />
         <button
           type="submit"
-          className="w-full py-2 bg-green-600 hover:bg-green-700 rounded font-semibold"
+          style={{
+            padding: '12px',
+            backgroundColor: '#16a34a',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '4px',
+            fontWeight: 'bold',
+            cursor: 'pointer'
+          }
+        }
         >
           Update Item
         </button>
