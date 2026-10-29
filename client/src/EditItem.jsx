@@ -11,11 +11,10 @@ export default function EditItem() {
     description: '',
   });
 
-  const { id } = useParams();
+const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-  
     const fetchItem = async () => {
       try {
         const res = await API.get('/items');
