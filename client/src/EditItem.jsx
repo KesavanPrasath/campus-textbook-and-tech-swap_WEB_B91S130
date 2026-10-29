@@ -35,6 +35,32 @@ const { id } = useParams();
     fetchItem();
   }, [id]);
 
+// This function will give a warning to user before closing the edit menu!!
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+
+  const handleNavClick = (path) => {
+    const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
+    if (isModified) {
+      if (window.confirm('You have unsaved changes. Do you really want to leave?')) {
+        navigate(path);
+      }
+    } else {
+      navigate(path);
+    }
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
