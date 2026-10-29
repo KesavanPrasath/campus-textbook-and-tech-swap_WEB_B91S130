@@ -45,10 +45,6 @@ const { id } = useParams();
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
 
   const handleNavClick = (path) => {
     const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
