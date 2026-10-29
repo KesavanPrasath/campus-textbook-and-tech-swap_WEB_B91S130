@@ -15,7 +15,7 @@ export default function EditItem() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch existing item details to pre-fill the form
+  
     const fetchItem = async () => {
       try {
         const res = await API.get('/items');
