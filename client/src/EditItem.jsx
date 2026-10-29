@@ -11,6 +11,8 @@ export default function EditItem() {
     description: '',
   });
 
+const [initialData, setInitialData] = useState(null);
+
 const { id } = useParams();
   const navigate = useNavigate();
 
@@ -26,7 +28,9 @@ const { id } = useParams();
             condition: currentItem.condition,
             price: currentItem.price,
             description: currentItem.description,
-          });
+          }
+          setFormData(fetchedData);
+          setInitialData(fetchedData););
         }
       } catch (error) {
         console.error('Failed to fetch item details', error);
@@ -47,7 +51,7 @@ const { id } = useParams();
 
 
   const handleNavClick = (path) => {
-    const isModified = JSON.stringify(formData) !== JSON.stringify(initialData);
+    const isModified = initialData && JSON.stringify(formData) !== JSON.stringify(initialData);
     if (isModified) {
       if (window.confirm('You have unsaved changes. Do you really want to leave?')) {
         navigate(path);
