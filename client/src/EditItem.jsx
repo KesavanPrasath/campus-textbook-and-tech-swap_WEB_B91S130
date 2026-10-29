@@ -21,16 +21,18 @@ const { id } = useParams();
       try {
         const res = await API.get('/items');
         const currentItem = res.data.find((item) => item._id === id);
-        if (currentItem) {
-          setFormData({
+       if (currentItem) {
+          const fetchedData = {
             title: currentItem.title,
             category: currentItem.category,
             condition: currentItem.condition,
             price: currentItem.price,
             description: currentItem.description,
-          }
+          };
           setFormData(fetchedData);
-          setInitialData(fetchedData););
+          setInitialData(fetchedData);
+        }
+    
         }
       } catch (error) {
         console.error('Failed to fetch item details', error);
