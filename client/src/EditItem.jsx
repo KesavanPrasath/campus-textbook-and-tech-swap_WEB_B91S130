@@ -33,7 +33,9 @@ const { id } = useParams();
           setInitialData(fetchedData);
         }
     
-        }
+        }catch (error) {
+        console.error('Failed to fetch item details', error);
+        
       } catch (error) {
         console.error('Failed to fetch item details', error);
       }
