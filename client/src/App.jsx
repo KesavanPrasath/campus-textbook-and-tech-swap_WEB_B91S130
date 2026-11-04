@@ -54,12 +54,16 @@ const Marketplace = ({ user }) => {
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 20 }}>
           {items.map((item) => (
-            <div key={item._id} style={{ border: '1px solid #cbd5e1', padding: 20, borderRadius: 8, background: '#f8fafc' }}>
-              <h4 style={{ margin: '0 0 10px 0' }}>{item.title}</h4>
-              <p style={{ margin: '5px 0' }}><strong>Category:</strong> {item.category}</p>
-              <p style={{ margin: '5px 0' }}><strong>Condition:</strong> {item.condition}</p>
-              <p style={{ margin: '5px 0' }}><strong>Price:</strong> ${item.price}</p>
-              <p style={{ margin: '10px 0 0 0', color: '#475569' }}>{item.description}</p>
+
+
+          <div key={item._id} style={{ border: '1px solid #cbd5e1', padding: 20, borderRadius: 8, background: '#f8fafc', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <h4 style={{ margin: '0 0 10px 0' }}>{item.title}</h4>
+                <p style={{ margin: '5px 0' }}><strong>Category:</strong> {item.category}</p>
+                <p style={{ margin: '5px 0' }}><strong>Condition:</strong> {item.condition}</p>
+                <p style={{ margin: '5px 0' }}><strong>Price:</strong> ${item.price}</p>
+                <p style={{ margin: '10px 0 0 0', color: '#475569' }}>{item.description}</p>
+              </div>
 
               {user && item.user && item.user._id === user._id && (
                 <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
