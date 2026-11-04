@@ -81,9 +81,25 @@ const deleteItem = async (req, res) => {
   }
 };
 
+//allowing guests to view the listed avail items
+const getItemById = async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id).populate('user', 'name email');
+    
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+    
+    res.status(200).json(item);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Export deleteItem wwith controllers
 module.exports = {
   getItems,
+  getItemById,
   createItem,
   updateItem,
   deleteItem,
