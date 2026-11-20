@@ -253,6 +253,170 @@ const CreateItem = () => {
   );
 };
 
+
+// Floating Inbox Widget
+const InboxWidget = ({ user }) => {
+  const [open, setOpen] = useState(false);
+  const [threads, setThreads] = useState([]);
+  const [activeId, setActiveId] = useState(null);
+  const [reply, setReply] = useState('');
+
+  const loadThreads = async () => {
+    if (!user) return;
+    try {
+      const res = await API.get('/messages');
+      setThreads(res.data);
+      if (res.data.length > 0 && !activeId) {
+        setActiveId(res.data[0]._id);
+      }
+    } catch (err) {
+      console.error('Inbox fetch failed:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (user) loadThreads();
+    else {
+      setThreads([]);
+      setActiveId(null);
+      setOpen(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (open && user) loadThreads();
+  }, [open]);
+
+  if (!user) return null;
+
+  const activeThread = threads.find((t) => t._id === activeId) || threads[0] || null;
+
+  const handleSendReply = async (e) => {
+    e.preventDefault();
+    if (!reply.trim() || !activeThread) return;
+    try {
+      const res = await API.post('/messages', {
+        itemId: activeThread.item?._id || activeThread.item,
+        buyerId: activeThread.buyer?._id || activeThread.buyer,
+        text: reply.trim(),
+      });
+      setThreads((prev) => prev.map((t) => (t._id === res.data._id ? res.data : t)));
+      setReply('');
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to send reply');
+    }
+  };
+
+  return (
+    <div style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 1000 }}>
+      {!open ? (
+        <button
+          onClick={() => setOpen(true)}
+          style={{
+            background: '#1e293b',
+            color: '#fff',
+            border: '1px solid #475569',
+            padding: '10px 16px',
+            borderRadius: 24,
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+          }}
+        >
+          Inbox ({threads.length})
+        </button>
+      ) : (
+        <div
+          style={{
+            width: 340,
+            maxHeight: 440,
+            background: '#fff',
+            color: '#0f172a',
+            border: '1px solid #cbd5e1',
+            borderRadius: 8,
+            boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+          }}
+        >
+          <div style={{ padding: '10px 14px', background: '#1e293b', color: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <strong>Inbox</strong>
+            <div>
+              <button onClick={loadThreads} style={{ marginRight: 8, cursor: 'pointer' }}>Refresh</button>
+              <button onClick={() => setOpen(false)} style={{ cursor: 'pointer' }}>✕</button>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flex: 1, minHeight: 260, overflow: 'hidden' }}>
+            <div style={{ width: 115, borderRight: '1px solid #e2e8f0', overflowY: 'auto', background: '#f8fafc' }}>
+              {threads.length === 0 ? (
+                <p style={{ padding: 10, fontSize: 12, color: '#64748b' }}>No messages yet</p>
+              ) : (
+                threads.map((t) => {
+                  const otherName =
+                    t.seller?._id === user._id ? t.buyer?.name || 'Buyer' : t.seller?.name || 'Seller';
+                  return (
+                    <div
+                      key={t._id}
+                      onClick={() => setActiveId(t._id)}
+                      style={{
+                        padding: 8,
+                        fontSize: 12,
+                        cursor: 'pointer',
+                        background: activeThread?._id === t._id ? '#e2e8f0' : 'transparent',
+                        borderBottom: '1px solid #e2e8f0',
+                      }}
+                    >
+                      <div style={{ fontWeight: 'bold' }}>{t.item?.title || 'Item'}</div>
+                      <div style={{ color: '#475569' }}>{otherName}</div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: 10 }}>
+              {activeThread ? (
+                <>
+                  <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {activeThread.messages.map((m, idx) => (
+                      <div
+                        key={m._id || idx}
+                        style={{
+                          padding: '6px 8px',
+                          borderRadius: 6,
+                          fontSize: 12,
+                          background: (m.sender?._id || m.sender) === user._id ? '#dbeafe' : '#f1f5f9',
+                          alignSelf: (m.sender?._id || m.sender) === user._id ? 'flex-end' : 'flex-start',
+                        }}
+                      >
+                        <div style={{ fontSize: 10, color: '#64748b' }}>{m.sender?.name || 'User'}</div>
+                        <div>{m.text}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <form onSubmit={handleSendReply} style={{ display: 'flex', gap: 4, marginTop: 8 }}>
+                    <input
+                      type="text"
+                      placeholder="Reply..."
+                      value={reply}
+                      onChange={(e) => setReply(e.target.value)}
+                      style={{ flex: 1, padding: 6, fontSize: 12 }}
+                    />
+                    <button type="submit" style={{ padding: '6px 10px', fontSize: 12, cursor: 'pointer' }}>Send</button>
+                  </form>
+                </>
+              ) : (
+                <p style={{ fontSize: 12, color: '#64748b' }}>Select a conversation</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Main Application Component
 export default function App() {
   const [user, setUser] = useState(null);
