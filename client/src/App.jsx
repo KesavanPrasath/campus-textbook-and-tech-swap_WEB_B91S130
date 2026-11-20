@@ -105,15 +105,29 @@ const Marketplace = ({ user }) => {
 const ItemDetails = ({ user }) => {
   const { id } = useParams();
   const [item, setItem] = useState(null);
+  const [requested, setRequested] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    API.get(`/items/${id}`).then((res) => setItem(res.data)).catch(() => navigate('/'));
+    setRequested(false);
+    API.get(`/items/${id}`)
+    .then((res) => setItem(res.data)).catch(() => navigate('/'));
   }, [id, navigate]);
+
+  
 
   if (!item) return <p style={{ padding: 30 }}>Loading...</p>;
 
   const isOwner = user && item.user && item.user._id === user._id;
+
+  const handleBuyRequest = () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    setRequested(true);
+    alert(`Buy request sent for "${item.title}"!`);
+  };
 
   return (
     <div style={{ padding: 30, maxWidth: 600, margin: '20px auto', border: '1px solid #cbd5e1', borderRadius: 8 }}>
