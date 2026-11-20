@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useParams } from 'react-router-dom';
 import API from './api';
 import EditItem from './EditItem';
 
@@ -94,6 +94,39 @@ const Marketplace = ({ user }) => {
             </div>
           ))}
         </div>
+      )}
+    </div>
+  );
+};
+
+
+// Item Details component
+
+const ItemDetails = ({ user }) => {
+  const { id } = useParams();
+  const [item, setItem] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    API.get(`/items/${id}`).then((res) => setItem(res.data)).catch(() => navigate('/'));
+  }, [id, navigate]);
+
+  if (!item) return <p style={{ padding: 30 }}>Loading...</p>;
+
+  const isOwner = user && item.user && item.user._id === user._id;
+
+  return (
+    <div style={{ padding: 30, maxWidth: 600, margin: '20px auto', border: '1px solid #cbd5e1', borderRadius: 8 }}>
+      <button onClick={() => navigate('/')}>← Back</button>
+      <h2>{item.title}</h2>
+      <p><strong>Category:</strong> {item.category}</p>
+      <p><strong>Condition:</strong> {item.condition}</p>
+      <p><strong>Price:</strong> ${item.price}</p>
+      <p>{item.description}</p>
+      {!isOwner && (
+        <button onClick={() => (user ? alert('Contacting seller...') : navigate('/login'))}>
+          {user ? 'Buy / Contact Seller' : 'Login to Buy'}
+        </button>
       )}
     </div>
   );
@@ -228,6 +261,7 @@ export default function App() {
       <Navbar user={user} handleLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Marketplace user={user} />} />
+        <Route path="/items/:id" element={<ItemDetails user={user} />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/register" element={<Register setUser={setUser} />} />
         <Route path="/create" element={<CreateItem />} />
