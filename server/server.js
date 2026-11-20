@@ -16,6 +16,7 @@ app.use(express.json());
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/items', require('./routes/itemRoutes'));
+app.use('/api/messages', require('./routes/messageRoutes'));
 
 // Base Route
 app.get('/', (req, res) => {
