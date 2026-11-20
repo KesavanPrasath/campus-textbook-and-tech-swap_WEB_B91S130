@@ -137,9 +137,9 @@ const ItemDetails = ({ user }) => {
       <p><strong>Condition:</strong> {item.condition}</p>
       <p><strong>Price:</strong> ${item.price}</p>
       <p>{item.description}</p>
-      {!isOwner && (
-        <button onClick={() => (user ? alert('Contacting seller...') : navigate('/login'))}>
-          {user ? 'Buy / Contact Seller' : 'Login to Buy'}
+     {!isOwner && (
+        <button onClick={handleBuyRequest} disabled={requested}>
+          {!user ? 'Login to Buy' : requested ? 'Buy Request Sent' : 'Buy / Contact Seller'}
         </button>
       )}
     </div>
