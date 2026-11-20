@@ -120,13 +120,21 @@ const ItemDetails = ({ user }) => {
 
   const isOwner = user && item.user && item.user._id === user._id;
 
-  const handleBuyRequest = () => {
+  const handleBuyRequest = async () => {
     if (!user) {
       navigate('/login');
       return;
     }
-    setRequested(true);
-    alert(`Buy request sent for "${item.title}"!`);
+    try {
+      await API.post('/messages', {
+        itemId: item._id,
+        text: `Buy request sent for "${item.title}"!`,
+      });
+      setRequested(true);
+      alert(`Buy request sent for "${item.title}"!`);
+    } catch (err) {
+      alert(err.response?.data?.message || 'Could not send buy request');
+    }
   };
 
   return (
@@ -445,6 +453,7 @@ export default function App() {
         <Route path="/create" element={<CreateItem />} />
         <Route path="/edit/:id" element={<EditItem />} />
       </Routes>
+      <InboxWidget user={user} />
     </Router>
   );
 }
